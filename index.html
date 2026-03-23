@@ -292,98 +292,10 @@
     }
     .burst-sub.show { opacity: 1; }
 
-    .nav-admin-btn { color: rgba(168,127,255,0.6) !important; }
-    .nav-admin-btn:hover { color: var(--purple2) !important; }
-    .nav-admin-btn.active { color: #fff !important; border-left-color: var(--gold) !important; }
-
-    /* ログ行スタイル */
-    .log-row { border-bottom:1px solid rgba(124,92,252,0.08); transition: background .15s; }
-    .log-row:last-child { border-bottom:none; }
-    .log-row:hover { background:rgba(124,92,252,0.06); }
-    .log-row td { padding:11px 14px; vertical-align:middle; }
-    .log-num { color:rgba(155,146,200,0.3); font-size:0.75rem; }
-    .log-id { font-family:monospace; font-size:0.82rem; color:var(--purple2); background:rgba(124,92,252,0.1); padding:3px 8px; border-radius:6px; white-space:nowrap; }
-    .log-name { font-weight:700; color:var(--text); }
-    .log-time { font-size:0.78rem; color:var(--muted); white-space:nowrap; }
-    .log-device { font-size:0.72rem; color:rgba(155,146,200,0.4); }
-
-    /* Discord modal flex */
-    #discordModal { display:none; }
-    #discordModal.show { display:flex; }
-    #adminModal { display:none; }
-    #adminModal.show { display:flex; }
-
-    /* 統計チップ */
-    .stat-chip { background:var(--card-bg);border:1px solid var(--card-border);border-radius:12px;padding:13px 16px;text-align:center; }
-    .stat-chip .stat-val { font-family:'Cinzel',serif;font-size:1.5rem;font-weight:700;color:var(--purple2); }
-    .stat-chip .stat-label { font-size:0.68rem;color:var(--muted);margin-top:3px;letter-spacing:0.05em; }
-
   </style>
 </head>
 <body>
 <canvas class="bg-canvas" id="bgCanvas"></canvas>
-
-<!-- ===== Discord入力モーダル ===== -->
-<div id="discordModal" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(4,3,13,0.88);backdrop-filter:blur(8px);align-items:center;justify-content:center;">
-  <div style="background:rgba(8,6,24,0.98);border:1px solid rgba(124,92,252,0.4);border-radius:20px;padding:36px 32px;max-width:400px;width:90%;box-shadow:0 0 60px rgba(124,92,252,0.2);">
-    <div style="text-align:center;margin-bottom:24px;">
-      <div style="width:56px;height:56px;border-radius:16px;background:rgba(88,101,242,0.2);border:1px solid rgba(88,101,242,0.4);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.5rem;color:#7289da;">
-        <i class="fa-brands fa-discord"></i>
-      </div>
-      <h2 style="font-family:'Cinzel',serif;font-size:1.1rem;color:#fff;margin-bottom:6px;">本人確認</h2>
-      <p style="font-size:0.78rem;color:var(--muted);line-height:1.7;">ルール閲覧記録のため、Discord情報を入力してください。<br>入力情報は管理者のみ確認できます。</p>
-    </div>
-    <div style="display:grid;gap:14px;">
-      <div>
-        <label style="display:block;font-size:0.72rem;color:var(--muted);margin-bottom:6px;letter-spacing:0.1em;">DISCORD ID（数字のみ）</label>
-        <input type="text" id="discordIdInput" placeholder="例：123456789012345678" inputmode="numeric"
-          style="width:100%;background:rgba(124,92,252,0.08);border:1px solid rgba(124,92,252,0.25);border-radius:10px;padding:10px 14px;color:var(--text);font-size:0.88rem;outline:none;font-family:'Noto Sans JP',sans-serif;box-sizing:border-box;transition:border-color .2s;">
-        <div id="discordIdErr" style="font-size:0.72rem;color:#ff8899;margin-top:5px;display:none;">17〜19桁の数字で入力してください</div>
-      </div>
-      <div>
-        <label style="display:block;font-size:0.72rem;color:var(--muted);margin-bottom:6px;letter-spacing:0.1em;">DISCORD 名前（表示名）</label>
-        <input type="text" id="discordNameInput" placeholder="例：たけのこ または たけのこ#1234"
-          style="width:100%;background:rgba(124,92,252,0.08);border:1px solid rgba(124,92,252,0.25);border-radius:10px;padding:10px 14px;color:var(--text);font-size:0.88rem;outline:none;font-family:'Noto Sans JP',sans-serif;box-sizing:border-box;transition:border-color .2s;">
-        <div id="discordNameErr" style="font-size:0.72rem;color:#ff8899;margin-top:5px;display:none;">名前を入力してください</div>
-      </div>
-    </div>
-    <button id="discordSubmitBtn" onclick="submitDiscordInfo()"
-      style="width:100%;margin-top:20px;padding:13px;background:linear-gradient(135deg,#5865F2,#3b45c2);border:none;border-radius:12px;color:#fff;font-weight:700;font-size:0.9rem;cursor:pointer;font-family:'Noto Sans JP',sans-serif;transition:opacity .2s;display:flex;align-items:center;justify-content:center;gap:8px;">
-      <i class="fa-brands fa-discord"></i> 記録して閲覧する
-    </button>
-    <p style="text-align:center;margin-top:12px;font-size:0.68rem;color:rgba(155,146,200,0.35);">この情報は管理目的にのみ使用されます</p>
-  </div>
-</div>
-
-<!-- ===== 管理者パスワードモーダル ===== -->
-<div id="adminModal" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(4,3,13,0.88);backdrop-filter:blur(8px);align-items:center;justify-content:center;">
-  <div style="background:rgba(8,6,24,0.98);border:1px solid rgba(124,92,252,0.4);border-radius:20px;padding:36px 32px;max-width:380px;width:90%;box-shadow:0 0 60px rgba(124,92,252,0.2);">
-    <div style="text-align:center;margin-bottom:24px;">
-      <div style="width:56px;height:56px;border-radius:16px;background:rgba(124,92,252,0.15);border:1px solid rgba(124,92,252,0.35);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.5rem;color:var(--purple2);">
-        <i class="fa-solid fa-shield-halved"></i>
-      </div>
-      <h2 style="font-family:'Cinzel',serif;font-size:1.1rem;color:#fff;margin-bottom:6px;">管理者認証</h2>
-      <p style="font-size:0.78rem;color:var(--muted);">このページは管理者のみ閲覧できます</p>
-    </div>
-    <div>
-      <label style="display:block;font-size:0.72rem;color:var(--muted);margin-bottom:6px;letter-spacing:0.1em;">パスワード</label>
-      <input type="password" id="adminPasswordInput" placeholder="管理者パスワードを入力"
-        style="width:100%;background:rgba(124,92,252,0.08);border:1px solid rgba(124,92,252,0.25);border-radius:10px;padding:10px 14px;color:var(--text);font-size:0.88rem;outline:none;font-family:'Noto Sans JP',sans-serif;box-sizing:border-box;"
-        onkeydown="if(event.key==='Enter') verifyAdmin()">
-      <div id="adminErr" style="font-size:0.72rem;color:#ff8899;margin-top:5px;display:none;">パスワードが違います</div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px;">
-      <button onclick="closeAdminModal()"
-        style="padding:11px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--muted);font-size:0.85rem;cursor:pointer;font-family:'Noto Sans JP',sans-serif;">
-        キャンセル
-      </button>
-      <button onclick="verifyAdmin()"
-        style="padding:11px;background:linear-gradient(135deg,var(--purple),#5533cc);border:none;border-radius:10px;color:#fff;font-weight:700;font-size:0.85rem;cursor:pointer;font-family:'Noto Sans JP',sans-serif;">
-        <i class="fa-solid fa-unlock" style="margin-right:5px;"></i>認証
-      </button>
-    </div>
-  </div>
-</div>
 
 <!-- 収集バー -->
 <div class="collect-bar" id="collectBar">
@@ -428,7 +340,6 @@
     <li class="nav-item" data-tab="tab-hostage"><i class="fa-solid fa-person-military-pointing"></i>人質ルール</li>
     <li class="nav-item" data-tab="tab-mgmt"><i class="fa-solid fa-wand-magic-sparkles"></i>魔法省ルール</li>
     <li class="nav-item" data-tab="tab-other"><i class="fa-solid fa-circle-info"></i>その他</li>
-    <li class="nav-item nav-admin-btn" data-tab="tab-admin" id="adminNavItem" style="margin-top:10px;border-top:1px solid rgba(124,92,252,0.15);padding-top:12px;"><i class="fa-solid fa-shield-halved"></i>管理者ログ</li>
   </ul>
 </aside>
 
@@ -474,7 +385,7 @@
         <p>Sorcery City は <b style="color:#fff;">ロールプレイを楽しむ街</b>です。<br>
         ルールは他サーバーより緩めに設定していますが、他プレイヤーのRP体験を著しく損なう行為は厳しく対処します。<br>
         不明な点は運営（魔法省）にチケットで問い合わせてください。<br>
-        運営スタッフが対応します。</p>
+         をはじめとする運営スタッフが対応します。</p>
       </div>
       <div class="rule-card">
         <ul class="rule-list">
@@ -731,7 +642,7 @@
           <li>補填の条件：<b>主犯の一連のクリップ提出</b>が必須</li>
           <li>歪みが起きた際の<b>プレイヤー判断でのやり直しは禁止</b></li>
           <li>必ずチケットで運営に確認を取ること</li>
-          <li>補填対応は魔法省が確認後に行います</li>
+          <li>補填対応は  をはじめとする魔法省が確認後に行います</li>
         </ul>
       </div>
     </div>
@@ -845,7 +756,7 @@
         <h2>🧙 魔法省（運営）へのルール</h2>
       </div>
       <div class="info-box">
-        <p>魔法省はこの街の運営チームです。<br>
+        <p>魔法省はこの街の運営チームです。 をはじめとするスタッフが対応しています。<br>
         トラブルや質問は必ずチケットを通して連絡してください。</p>
       </div>
       <div class="rule-card">
@@ -854,6 +765,7 @@
           <li>報告・通報・質問はすべて<b>【ticket】チャンネル</b>で行うこと</li>
           <li>ログ・スクリーンショット・クリップがあると対応が早くなります</li>
           <li>緊急でない案件は定時瞑想後に対応する場合があります</li>
+          <li> は街全般の管理を担当しています</li>
         </ul>
       </div>
       <div class="rule-card">
@@ -879,7 +791,7 @@
           <li>Discordの【ticket】チャンネルからチケットを作成</li>
           <li>内容を詳しく記載（状況・日時・関係プレイヤー名など）</li>
           <li>可能であればクリップ・スクリーンショットを添付</li>
-          <li>サポートスタッフが確認次第返答します</li>
+          <li>対応スタッフ（ 等）が確認次第返答します</li>
           <li>緊急の場合はチケット作成後、Discordで追記すること</li>
         </ul>
       </div>
@@ -958,20 +870,20 @@
             <h4>現実 → RP用語</h4>
             <ul class="rule-list" style="font-size:0.8rem;">
               <li>現実世界 → 夢の世界 / 夢</li>
-              <li>キーボード → 筋肉</li>
+              <li>キーボード → 魔法陣</li>
               <li>配信 → 衛星</li>
               <li>nameTag → 名札</li>
-              <li>NPC → 無の民（モブ）</li>
+              <li>NPC → 市民（モブ）</li>
             </ul>
           </div>
           <div class="sub-box" style="margin-bottom:0;">
             <h4>ゲーム用語 → RP用語</h4>
             <ul class="rule-list" style="font-size:0.8rem;">
               <li>バグ → 歪み</li>
-              <li>ログアウト → 瞑想</li>
-              <li>定時の再起動 → 定時瞑想、強制瞑想</li>
-              <li>録画 → ボディカメラ</li>
-              <li>運営 → 魔法省</li>
+              <li>ログアウト → 夢から覚める</li>
+              <li>定時の再起動 → 定時の瞑想</li>
+              <li>録画 → 記録水晶</li>
+              <li>魔法省 → 運営</li>
             </ul>
           </div>
         </div>
@@ -986,278 +898,11 @@
     
     <p style="margin-top:16px;font-size:0.7rem;opacity:.35;">© 2026 Sorcery City. All rights reserved.</p>
   </footer>
-
-  <!-- ===== 管理者ログ ===== -->
-  <div class="tab-content" id="tab-admin">
-    <div class="rule-section visible" style="max-width:100%;">
-      <div class="section-title">
-        <div class="section-icon icon-purple"><i class="fa-solid fa-shield-halved"></i></div>
-        <h2>管理者ログ — 閲覧記録</h2>
-      </div>
-      <div class="info-box">
-        <p>このページはルールを閲覧したユーザーの記録です。管理者のみ閲覧できます。</p>
-      </div>
-
-      <!-- ログ操作バー -->
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
-        <div style="flex:1;min-width:180px;">
-          <input type="text" id="adminSearch" placeholder="🔍 IDまたは名前で検索…" style="width:100%;background:rgba(124,92,252,0.08);border:1px solid rgba(124,92,252,0.25);border-radius:10px;padding:9px 14px;color:var(--text);font-size:0.82rem;outline:none;font-family:'Noto Sans JP',sans-serif;">
-        </div>
-        <select id="adminSort" style="background:rgba(6,4,20,0.9);border:1px solid rgba(124,92,252,0.25);border-radius:10px;padding:9px 12px;color:var(--text);font-size:0.82rem;outline:none;cursor:pointer;">
-          <option value="newest">新しい順</option>
-          <option value="oldest">古い順</option>
-        </select>
-        <button onclick="exportLogs()" style="background:rgba(80,200,180,0.12);border:1px solid rgba(80,200,180,0.3);border-radius:10px;padding:9px 16px;color:#80e8d8;font-size:0.82rem;cursor:pointer;font-family:'Noto Sans JP',sans-serif;white-space:nowrap;">
-          <i class="fa-solid fa-download" style="margin-right:6px;"></i>CSV出力
-        </button>
-        <button onclick="clearLogs()" style="background:rgba(255,85,102,0.10);border:1px solid rgba(255,85,102,0.25);border-radius:10px;padding:9px 16px;color:#ff8899;font-size:0.82rem;cursor:pointer;font-family:'Noto Sans JP',sans-serif;white-space:nowrap;">
-          <i class="fa-solid fa-trash" style="margin-right:6px;"></i>ログ削除
-        </button>
-      </div>
-
-      <!-- 統計バー -->
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:20px;" id="adminStats">
-      </div>
-
-      <!-- ログテーブル -->
-      <div class="rule-card" style="padding:0;overflow:hidden;">
-        <div style="overflow-x:auto;">
-          <table style="width:100%;border-collapse:collapse;font-size:0.82rem;" id="logTable">
-            <thead>
-              <tr style="background:rgba(124,92,252,0.12);border-bottom:1px solid rgba(124,92,252,0.2);">
-                <th style="padding:12px 14px;text-align:left;color:var(--muted);font-weight:700;letter-spacing:0.05em;">#</th>
-                <th style="padding:12px 14px;text-align:left;color:var(--muted);font-weight:700;"><i class="fa-brands fa-discord" style="margin-right:5px;"></i>Discord ID</th>
-                <th style="padding:12px 14px;text-align:left;color:var(--muted);font-weight:700;">名前</th>
-                <th style="padding:12px 14px;text-align:left;color:var(--muted);font-weight:700;"><i class="fa-solid fa-clock" style="margin-right:5px;"></i>閲覧日時</th>
-                <th style="padding:12px 14px;text-align:left;color:var(--muted);font-weight:700;">端末</th>
-              </tr>
-            </thead>
-            <tbody id="logTableBody">
-            </tbody>
-          </table>
-        </div>
-        <div id="logEmpty" style="display:none;text-align:center;padding:48px 20px;color:var(--muted);">
-          <i class="fa-solid fa-inbox" style="font-size:2rem;margin-bottom:12px;opacity:0.3;display:block;"></i>
-          まだ閲覧記録がありません
-        </div>
-      </div>
-    </div>
-  </div>
-</div><!-- end page-wrap -->
+</div>
 
 <script>
 
-// ===== 管理者設定 =====
-// ★ パスワードをここで変更してください ★
-const ADMIN_PASSWORD = 'sorcery2026';
-
-// ===== ストレージキー =====
-const STORAGE_KEY = 'sc_view_logs';
-const DISCORD_KEY = 'sc_discord_verified';
-const ADMIN_KEY = 'sc_admin_auth';
-
-// ===== Discord入力モーダル制御 =====
-function showDiscordModal() {
-  document.getElementById('discordModal').classList.add('show');
-  setTimeout(()=>document.getElementById('discordIdInput').focus(), 100);
-}
-function hideDiscordModal() {
-  document.getElementById('discordModal').classList.remove('show');
-}
-
-function submitDiscordInfo() {
-  const idEl = document.getElementById('discordIdInput');
-  const nameEl = document.getElementById('discordNameInput');
-  const id = idEl.value.trim();
-  const name = nameEl.value.trim();
-  let valid = true;
-
-  // Discord ID validation (17-19 digits)
-  const idOk = /^\d{17,19}$/.test(id);
-  document.getElementById('discordIdErr').style.display = idOk ? 'none' : 'block';
-  if (!idOk) { idEl.style.borderColor='rgba(255,85,102,0.6)'; valid=false; }
-  else idEl.style.borderColor='rgba(124,92,252,0.25)';
-
-  const nameOk = name.length >= 1;
-  document.getElementById('discordNameErr').style.display = nameOk ? 'none' : 'block';
-  if (!nameOk) { nameEl.style.borderColor='rgba(255,85,102,0.6)'; valid=false; }
-  else nameEl.style.borderColor='rgba(124,92,252,0.25)';
-
-  if (!valid) return;
-
-  // 記録
-  const log = {
-    id: id,
-    name: name,
-    time: new Date().toISOString(),
-    ua: getDeviceType()
-  };
-  savelog(log);
-
-  // セッション記録（再入力不要に）
-  sessionStorage.setItem(DISCORD_KEY, JSON.stringify({id, name}));
-
-  hideDiscordModal();
-}
-
-function getDeviceType() {
-  const ua = navigator.userAgent;
-  if (/iPhone|iPad|iPod/.test(ua)) return 'iOS';
-  if (/Android/.test(ua)) return 'Android';
-  if (/Windows/.test(ua)) return 'Windows';
-  if (/Mac/.test(ua)) return 'Mac';
-  return 'Other';
-}
-
-function savelog(log) {
-  const logs = getLogs();
-  logs.push(log);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
-}
-
-function getLogs() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
-  catch { return []; }
-}
-
-// ===== 管理者認証 =====
-function openAdminTab() {
-  // セッション中に認証済みか？
-  if (sessionStorage.getItem(ADMIN_KEY) === '1') {
-    showAdminTab();
-    return;
-  }
-  document.getElementById('adminModal').classList.add('show');
-  setTimeout(()=>document.getElementById('adminPasswordInput').focus(), 100);
-}
-
-function closeAdminModal() {
-  document.getElementById('adminModal').classList.remove('show');
-  document.getElementById('adminPasswordInput').value = '';
-  document.getElementById('adminErr').style.display = 'none';
-  // アクティブタブを戻す
-  const first = document.querySelector('.nav-item:not(.nav-admin-btn)');
-  if (first) switchTab(first.dataset.tab);
-}
-
-function verifyAdmin() {
-  const pw = document.getElementById('adminPasswordInput').value;
-  if (pw === ADMIN_PASSWORD) {
-    sessionStorage.setItem(ADMIN_KEY, '1');
-    document.getElementById('adminModal').classList.remove('show');
-    document.getElementById('adminPasswordInput').value = '';
-    document.getElementById('adminErr').style.display = 'none';
-    showAdminTab();
-  } else {
-    document.getElementById('adminErr').style.display = 'block';
-    document.getElementById('adminPasswordInput').value = '';
-    document.getElementById('adminPasswordInput').focus();
-  }
-}
-
-function showAdminTab() {
-  // 通常のタブ切り替え
-  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById('tab-admin').classList.add('active');
-  document.getElementById('adminNavItem').classList.add('active');
-  window.scrollTo({top:0,behavior:'smooth'});
-  renderAdminLogs();
-}
-
-// ===== ログ描画 =====
-function renderAdminLogs(filter='', sort='newest') {
-  let logs = getLogs();
-
-  // 統計
-  const today = new Date().toDateString();
-  const todayCount = logs.filter(l => new Date(l.time).toDateString() === today).length;
-  const uniqueIds = new Set(logs.map(l=>l.id)).size;
-  document.getElementById('adminStats').innerHTML = `
-    <div class="stat-chip"><div class="stat-val">${logs.length}</div><div class="stat-label">総閲覧数</div></div>
-    <div class="stat-chip"><div class="stat-val">${uniqueIds}</div><div class="stat-label">ユニークユーザー</div></div>
-    <div class="stat-chip"><div class="stat-val">${todayCount}</div><div class="stat-label">本日の閲覧</div></div>
-  `;
-
-  // フィルター
-  if (filter) {
-    const q = filter.toLowerCase();
-    logs = logs.filter(l => l.id.includes(q) || l.name.toLowerCase().includes(q));
-  }
-  // ソート
-  if (sort === 'newest') logs = [...logs].reverse();
-
-  const tbody = document.getElementById('logTableBody');
-  const empty = document.getElementById('logEmpty');
-
-  if (logs.length === 0) {
-    tbody.innerHTML = '';
-    empty.style.display = 'block';
-    return;
-  }
-  empty.style.display = 'none';
-
-  tbody.innerHTML = logs.map((l, i) => {
-    const dt = new Date(l.time);
-    const dateStr = dt.toLocaleDateString('ja-JP', {year:'numeric',month:'2-digit',day:'2-digit'});
-    const timeStr = dt.toLocaleTimeString('ja-JP', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
-    return `<tr class="log-row">
-      <td class="log-num">${i+1}</td>
-      <td><span class="log-id">${escHtml(l.id)}</span></td>
-      <td class="log-name">${escHtml(l.name)}</td>
-      <td class="log-time">${dateStr}<br><span style="color:rgba(155,146,200,0.5);font-size:0.72rem;">${timeStr}</span></td>
-      <td class="log-device"><i class="fa-solid fa-${deviceIcon(l.ua)}" style="margin-right:4px;"></i>${escHtml(l.ua||'?')}</td>
-    </tr>`;
-  }).join('');
-}
-
-function deviceIcon(ua) {
-  if (!ua) return 'question';
-  if (ua==='iOS') return 'mobile-screen';
-  if (ua==='Android') return 'mobile-android';
-  if (ua==='Windows'||ua==='Mac') return 'desktop';
-  return 'globe';
-}
-
-function escHtml(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
-function clearLogs() {
-  if (!confirm('全閲覧ログを削除しますか？この操作は取り消せません。')) return;
-  localStorage.removeItem(STORAGE_KEY);
-  renderAdminLogs();
-}
-
-function exportLogs() {
-  const logs = getLogs();
-  if (!logs.length) { alert('ログがありません'); return; }
-  const csv = ['#,Discord ID,名前,閲覧日時,端末']
-    .concat(logs.map((l,i)=>`${i+1},${l.id},"${l.name}",${new Date(l.time).toLocaleString('ja-JP')},${l.ua||''}`))
-    .join('\n');
-  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `sc_viewlog_${new Date().toISOString().slice(0,10)}.csv`;
-  a.click();
-}
-
-// 検索・ソート
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('adminSearch').addEventListener('input', function() {
-    renderAdminLogs(this.value, document.getElementById('adminSort').value);
-  });
-  document.getElementById('adminSort').addEventListener('change', function() {
-    renderAdminLogs(document.getElementById('adminSearch').value, this.value);
-  });
-
-  // ページロード時にDiscordモーダル表示（未入力の場合）
-  if (!sessionStorage.getItem(DISCORD_KEY)) {
-    showDiscordModal();
-  }
-});
-
-
+// ===== キーワード収集 =====
 const TOTAL_KW = 3;
 let collected = new Set();
 
@@ -1432,11 +1077,6 @@ const navItems=document.querySelectorAll('.nav-item');
 const tabs=document.querySelectorAll('.tab-content');
 
 function switchTab(tabId){
-  // 管理者タブは認証が必要
-  if(tabId === 'tab-admin'){
-    openAdminTab();
-    return;
-  }
   tabs.forEach(t=>t.classList.remove('active'));
   navItems.forEach(n=>n.classList.remove('active'));
   const tab=document.getElementById(tabId);
